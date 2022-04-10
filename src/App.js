@@ -7,7 +7,7 @@ import {GoogleMap, withScriptjs, withGoogleMap, Marker} from 'react-google-maps'
 
 /* IMPORTANT youtube vids: https://www.youtube.com/watch?v=x7niho285qs | https://www.youtube.com/watch?v=Gyg5R8Sfo1U */
 
-function TestTweet() {
+function TestTweet({setSenator}) {
   const [ search, setSearch ] = useState("");
   const [ results, setResults ] = useState([]);
 
@@ -23,8 +23,9 @@ function TestTweet() {
       throw Error(response_senator.statusText);
     }
 
-    const json = await response_senator.json()
-    setResults(json['wiki_html'].slice(1,-1))
+    const json = await response_senator.json();
+    setResults(json['wiki_html'].slice(1,-1));
+    setSenator(json);
   }
 
   return (
@@ -109,7 +110,7 @@ function SelectV2() {
     );
 }
 
-function SelectV3() {
+function SelectV3({setSenator}) {
   const [ search, setSearch ] = useState("");
   const [ results, setResults ] = useState([]);
   // const [ searchInfo, setSearchInfo] = useState({});
@@ -125,12 +126,14 @@ function SelectV3() {
           throw Error(response.statusText);
       }
 
-      const json = await response.json()
+      const json = await response.json();
 
       if (json[0] === "Error, not found") {
-        setResults("")
+        setResults("");
+        setSenator("");
       } else {
-        setResults(json['wiki_html'].slice(1,-1))
+        setResults(json['wiki_html'].slice(1,-1));
+        setSenator(json);
       }
   }
 
@@ -150,7 +153,7 @@ function SelectV3() {
               <button value="Submit" class="btn btn-outline-primary">Search</button>
           </form> 
           <div className='result'>
-              <p dangerouslySetInnerHTML={{__html: results}}></p>
+              <p dangerouslySetInnerHTML={{__html: results}} ></p>
           </div> 
       </div>
   );
@@ -183,6 +186,9 @@ function TwitterApp() {
       setChecked(!checked);
   }
 
+  // trying to connet all the funciton and pass stuff
+  const [senator, setSenator] = useState();
+
   return (
     <div className="App-header">
         <div className='header'>
@@ -193,14 +199,15 @@ function TwitterApp() {
                 
                 <Switch checked={checked} handleChange={handleChange}/>
                 { checked ? (
-                    <TestTweet/>
+                    <TestTweet setSenator={setSenator}/>
                 ) : (
                     // <SelectSenator/>
-                    <SelectV3/>
+                    <SelectV3 setSenator={setSenator}/>
                 )}
             </div>
             <div className="map">
               <WrappedMap 
+                returnJSON={senator}
                 googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&v=3.exp&libraries=geometry,drawing,places`}
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `100%` }} />}
@@ -212,20 +219,43 @@ function TwitterApp() {
   );
 }
 
-function Map() {
-  return (
-    <GoogleMap 
-      defaultZoom={4}
-      defaultCenter={{lat: 38.907192, lng: -77.036873}}
-    >
-      <Marker 
-        position={{
-          lat: 38.907192,
-          lng: -77.036873
+function Map(props) {
+  // const lat = props.returnJSON['latitude'];
+  // const lng = props.returnJSON['longitude'];
+  if (props.returnJSON) {
+    // console.log(props.returnJSON['latitude']);
+    return (
+      <GoogleMap 
+        defaultZoom={11}
+        defaultCenter={{
+          lat: Number(props.returnJSON['latitude']), 
+          lng: Number(props.returnJSON['longitude'])
         }}
-      />
-    </GoogleMap>
-  );
+      >
+        <Marker 
+          position={{
+            lat: Number(props.returnJSON['latitude']), 
+            lng: Number(props.returnJSON['longitude'])
+          }}
+        />
+      </GoogleMap>
+    );
+  }
+  else {
+    return (
+      <GoogleMap 
+        defaultZoom={4}
+        defaultCenter={{lat: 38.907192, lng: -77.036873}}
+      >
+        <Marker 
+          position={{
+            lat: 38.907192,
+            lng: -77.036873
+          }}
+        />
+      </GoogleMap>
+    );
+  }
 }
 
 const WrappedMap = withScriptjs(withGoogleMap(Map));
