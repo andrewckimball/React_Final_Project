@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './App.css';
 import SearchBar from "./Components/SearchBar.js";
 import senatordata from "./listData.json";
-import JSSoup from 'jssoup';
 import {GoogleMap, withScriptjs, withGoogleMap, Marker, InfoWindow} from 'react-google-maps';
 
 /* IMPORTANT youtube vids: https://www.youtube.com/watch?v=x7niho285qs | https://www.youtube.com/watch?v=Gyg5R8Sfo1U */
@@ -66,11 +65,9 @@ function SelectSenatorOLD() {
   );
 }
 
-
 function SelectSenator({setSenator}) {
   const [ search, setSearch ] = useState("");
   const [ results, setResults ] = useState([]);
-  // const [ searchInfo, setSearchInfo] = useState({});
 
   const handleSearch = async e => {
       e.preventDefault();
@@ -115,9 +112,6 @@ function SelectSenator({setSenator}) {
                 <p dangerouslySetInnerHTML={{__html: results}} ></p>
               </div> 
           </form> 
-          {/* <div className='result'>
-              <p dangerouslySetInnerHTML={{__html: results}} ></p>
-          </div>  */}
       </div>
   );
 }
