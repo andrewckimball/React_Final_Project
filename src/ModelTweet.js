@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 function ModelTweet({setSenator}) {
   const [ search, setSearch ] = useState("");
-  // const [ results, setResults ] = useState([]);
   const [ results, setResults ] = useState(null);
 
   const handleSearch = async e => {
@@ -43,9 +42,6 @@ function ModelTweet({setSenator}) {
           </textarea>
       </div>
       <button value="Submit" class="btn btn-outline-primary">Run Model</button>
-      {/* <div>
-        <p dangerouslySetInnerHTML={{__html: results}}></p>
-      </div> */}
       <br></br><br></br>
       {results && (
         <div className="col-md-12">

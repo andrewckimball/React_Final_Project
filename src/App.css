@@ -7,12 +7,6 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -86,13 +80,44 @@
 p {
   font-size: 16px;
 }
-/* 
-.formatWiki {
-  position: absolute;
-} */
 
 .imgWrap {
   float: left;
   width: 250px;
   padding-right: 0.5cm;
+}
+
+/* @media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+} */
+
+@media screen and (max-width: 800px) {
+  #menu i.material-icons {
+    font-size: 160%;
+    color: black;
+  }
+
+  .content {
+    flex-direction:column
+  }
+
+  .twitter {
+    height: 45%;
+    min-height: 45%;
+    order: 10;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .map,.twitter {
+    min-width: 100%;
+    max-width: 100%
+  }
+
+  .header {
+    flex-direction: column;
+    min-height: 9%;
+  } 
 }

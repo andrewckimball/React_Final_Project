@@ -14,7 +14,7 @@ function ToggleView(props) {
               checked= {checked}
               onChange={handleChange}
           />
-          <label className="form-check-label" htmlFor="flexSwitchCheckChecked">AI Guess or Selection?</label>
+          <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Select Senator or Test ML Model?</label>
       </div>
       <br/>
     </>
