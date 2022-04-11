@@ -3,7 +3,7 @@ import './App.css';
 import SearchBar from "./Components/SearchBar.js";
 import senatordata from "./listData.json";
 import JSSoup from 'jssoup';
-import {GoogleMap, withScriptjs, withGoogleMap, Marker} from 'react-google-maps';
+import {GoogleMap, withScriptjs, withGoogleMap, Marker, InfoWindow} from 'react-google-maps';
 
 /* IMPORTANT youtube vids: https://www.youtube.com/watch?v=x7niho285qs | https://www.youtube.com/watch?v=Gyg5R8Sfo1U */
 
@@ -16,7 +16,10 @@ function TestTweet({setSenator}) {
     if (search === "") return;
 
     // Pull correct senator name from model guess
-    const sen_name_endpoint = `http://127.0.0.1:8000/predict/${search}&origin=*`;
+    // Debugging endpoint
+    // const sen_name_endpoint = `http://127.0.0.1:8000/predict/${search}&origin=*`;
+    // Live endpoint
+    const sen_name_endpoint = `http://18.223.172.210/predict/${search}&origin=*`;
     const response_senator = await fetch(sen_name_endpoint);
     
     if (!response_senator.ok) {
@@ -44,14 +47,13 @@ function TestTweet({setSenator}) {
       </div>
       <button value="Submit" class="btn btn-outline-primary">Run Model</button>
       <div>
-        {/* <p>{results}</p> */}
         <p dangerouslySetInnerHTML={{__html: results}}></p>
       </div>
     </form> 
   );
 }
 
-function SelectSenator() {
+function SelectSenatorOLD() {
   return (
     <>
       <form class="col-lg-9 offset-lg-1">
@@ -64,53 +66,8 @@ function SelectSenator() {
   );
 }
 
-function SelectV2() {
-    const [ search, setSearch ] = useState("");
-    const [ results, setResults ] = useState([]);
-    // const [ searchInfo, setSearchInfo] = useState({});
 
-    const handleSearch = async e => {
-        e.preventDefault();
-        if (search === "") return;
-
-        const endpoint = `http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=${search}&origin=*`;
-
-        const response = await fetch(endpoint);
-
-        if (!response.ok) {
-            throw Error(response.statusText);
-        }
-
-        const json = await response.json()
-        setResults(json.parse.text['*'])
-    }
-
-    const soup = new JSSoup(results);
-    const new_results = soup.findAll('p');
-    console.log(new_results)
-
-    return (
-        <div className='SelectV2'>
-            <form name="form" class="col-lg-9 offset-lg-1" onSubmit={handleSearch}>
-                <div class="form-group">
-                    <label>Choose Senator among list</label>
-                    <input 
-                        class="form-control" 
-                        name="tweet" 
-                        placeholder="Enter Senator" 
-                        value={search}
-                        onChange={e => setSearch(e.target.value)}/>
-                </div>
-                <button value="Submit" class="btn btn-outline-primary">Search</button>
-            </form> 
-            <div className='result'>
-                <p dangerouslySetInnerHTML={{__html: results}}></p>
-            </div> 
-        </div>
-    );
-}
-
-function SelectV3({setSenator}) {
+function SelectSenator({setSenator}) {
   const [ search, setSearch ] = useState("");
   const [ results, setResults ] = useState([]);
   // const [ searchInfo, setSearchInfo] = useState({});
@@ -119,7 +76,10 @@ function SelectV3({setSenator}) {
       e.preventDefault();
       if (search === "") return;
 
-      const endpoint = `http://127.0.0.1:8000/select/${search}`;
+      // Debugging purposes
+      // const endpoint = `http://127.0.0.1:8000/select/${search}`;
+      // Live
+      const endpoint = `http://18.223.172.210/select/${search}`;
       const response = await fetch(endpoint);
       
       if (!response.ok) {
@@ -151,10 +111,13 @@ function SelectV3({setSenator}) {
                       onChange={e => setSearch(e.target.value)}/>
               </div>
               <button value="Submit" class="btn btn-outline-primary">Search</button>
+              <div className='result'>
+                <p dangerouslySetInnerHTML={{__html: results}} ></p>
+              </div> 
           </form> 
-          <div className='result'>
+          {/* <div className='result'>
               <p dangerouslySetInnerHTML={{__html: results}} ></p>
-          </div> 
+          </div>  */}
       </div>
   );
 }
@@ -181,13 +144,12 @@ function Switch(props) {
 
 function TwitterApp() {
   const [checked, setChecked] = useState(false);
+  const [senator, setSenator] = useState();
 
   const handleChange = () => {
       setChecked(!checked);
   }
 
-  // trying to connet all the funciton and pass stuff
-  const [senator, setSenator] = useState();
 
   return (
     <div className="App-header">
@@ -201,8 +163,7 @@ function TwitterApp() {
                 { checked ? (
                     <TestTweet setSenator={setSenator}/>
                 ) : (
-                    // <SelectSenator/>
-                    <SelectV3 setSenator={setSenator}/>
+                    <SelectSenator setSenator={setSenator}/>
                 )}
             </div>
             <div className="map">
@@ -220,42 +181,53 @@ function TwitterApp() {
 }
 
 function Map(props) {
-  // const lat = props.returnJSON['latitude'];
-  // const lng = props.returnJSON['longitude'];
-  if (props.returnJSON) {
-    // console.log(props.returnJSON['latitude']);
-    return (
-      <GoogleMap 
-        defaultZoom={11}
-        defaultCenter={{
-          lat: Number(props.returnJSON['latitude']), 
-          lng: Number(props.returnJSON['longitude'])
-        }}
-      >
+
+  const defaultZoom = props.returnJSON ? 7 : 4;
+  const lat = props.returnJSON ? Number(props.returnJSON['latitude']) : 38.907192;
+  const lng = props.returnJSON ? Number(props.returnJSON['longitude']) : -94.036873;
+  const summary = props.returnJSON ? props.returnJSON['capital_summary'] : "DC TEST";
+
+  const [selectedCapital, setSelectedCapital] = useState(null);
+
+  return (
+    <GoogleMap 
+      zoom={defaultZoom}
+      center={{
+        lat:lat,
+        lng: lng
+      }}
+    >
+      {props.returnJSON && (
         <Marker 
           position={{
-            lat: Number(props.returnJSON['latitude']), 
-            lng: Number(props.returnJSON['longitude'])
+            lat: lat,
+            lng: lng
+          }}
+          onClick={() => {
+            setSelectedCapital(true);  
           }}
         />
-      </GoogleMap>
-    );
-  }
-  else {
-    return (
-      <GoogleMap 
-        defaultZoom={4}
-        defaultCenter={{lat: 38.907192, lng: -77.036873}}
-      >
-        <Marker 
+      )}
+
+
+      {selectedCapital && (
+        <InfoWindow 
           position={{
-            lat: 38.907192,
-            lng: -77.036873
+            lat: lat,
+            lng: lng
           }}
-        />
-      </GoogleMap>
-    );
-  }
+          onCloseClick={() => {
+            setSelectedCapital(null);
+          }}
+        >
+          <div style={{color: 'black'}}>
+            <h2>{props.returnJSON['capital_city'] + ", " + props.returnJSON['state']}</h2>
+            <p>{summary}</p>
+          </div>
+        </InfoWindow>
+      )}
+    </GoogleMap>
+  );
 }
 
 const WrappedMap = withScriptjs(withGoogleMap(Map));
