@@ -86,4 +86,13 @@
 p {
   font-size: 16px;
 }
+/* 
+.formatWiki {
+  position: absolute;
+} */
 
+.imgWrap {
+  float: left;
+  width: 250px;
+  padding-right: 0.5cm;
+}

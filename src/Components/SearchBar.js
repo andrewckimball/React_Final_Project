@@ -3,15 +3,16 @@ import "./SearchBar.css";
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 
-function SearchBar({placeholder, data}) {
+
+function SearchBar({placeholder, NameData, setSearch}) {
     const [filteredData, setFilteredData] = useState([]);
     const [wordEntered, setWordEntered] = useState("");
-  
+
     const handleFilter = (event) => {
         const searchWord = event.target.value;
         setWordEntered(searchWord);
-        const newFilter = data.filter((value) => {
-            return value.name.toLowerCase().includes(searchWord.toLowerCase());
+        const newFilter = NameData.data.filter((value) => {
+            return value.rename.toLowerCase().includes(searchWord.toLowerCase()); 
         });
 
         if (searchWord === "") {
@@ -25,6 +26,16 @@ function SearchBar({placeholder, data}) {
         setFilteredData([]);
         setWordEntered("");
     };
+    
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    const runSearch = async (val) => {
+        setSearch(val);
+        setWordEntered("");
+        await delay(100);
+        setFilteredData([]);
+        
+    }
 
     return (
         <div className="search">
@@ -47,12 +58,19 @@ function SearchBar({placeholder, data}) {
             {filteredData.length !== 0 && (
                 <div className='dataResult'>
                     {filteredData.map((value, key) => {
-                        return <p className='dataItem'>{value.name}</p>
-                        // return (
-                        //     <a className='dataItem'>
-                        //         <p>{value.name}</p>
-                        //     </a>
-                        // )
+                        return (
+                            <>
+                                <button 
+                                    value={value.key_name} 
+                                    // onClick={setSearch(value.key_name)}
+                                    onClick={() => {runSearch(value.key_name)}}
+                                    className="btn btn-link"
+                                >
+                                    {value.rename}
+                                </button>
+                                <br></br>
+                            </>
+                        )
                     })}
                 </div>
             )}

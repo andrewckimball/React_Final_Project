@@ -5,17 +5,18 @@ function ToggleView(props) {
 
   return (
     <>
-        <div class="form-check form-switch offset-lg-1">
-            <input 
-                class="form-check-input" 
-                type="checkbox" 
-                id="flexSwitchCheckChecked" 
-                checked= {checked}
-                onChange={handleChange}
-            />
-            <label class="form-check-label" for="flexSwitchCheckChecked">AI Guess or Selection?</label>
-        </div>
-        <br/>
+      <br></br>
+      <div className="form-check form-switch offset-lg-1">
+          <input 
+              className="form-check-input" 
+              type="checkbox" 
+              id="flexSwitchCheckChecked" 
+              checked= {checked}
+              onChange={handleChange}
+          />
+          <label className="form-check-label" htmlFor="flexSwitchCheckChecked">AI Guess or Selection?</label>
+      </div>
+      <br/>
     </>
   );
 }

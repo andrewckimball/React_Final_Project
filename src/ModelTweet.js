@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 
 function ModelTweet({setSenator}) {
   const [ search, setSearch ] = useState("");
-  const [ results, setResults ] = useState([]);
+  // const [ results, setResults ] = useState([]);
+  const [ results, setResults ] = useState(null);
 
   const handleSearch = async e => {
     e.preventDefault();
@@ -21,7 +22,8 @@ function ModelTweet({setSenator}) {
     }
 
     const json = await response_senator.json();
-    setResults(json['wiki_html'].slice(1,-1));
+    // setResults(json['wiki_html'].slice(1,-1));
+    setResults(json);
     setSenator(json);
   }
 
@@ -34,15 +36,24 @@ function ModelTweet({setSenator}) {
             name="tweet" 
             rows="3" 
             placeholder="Enter tweet text"
+            maxLength="280"
             value={search}
             onChange={e => setSearch(e.target.value)}
           >
           </textarea>
       </div>
       <button value="Submit" class="btn btn-outline-primary">Run Model</button>
-      <div>
+      {/* <div>
         <p dangerouslySetInnerHTML={{__html: results}}></p>
-      </div>
+      </div> */}
+      <br></br><br></br>
+      {results && (
+        <div className="col-md-12">
+          <h3>{results['full_name']}</h3>
+          <img src={results['img']} className='imgWrap' alt='img'></img>
+          <p dangerouslySetInnerHTML={{__html: results['wiki_html'].slice(1,-1)}}></p>
+        </div>
+      )}
     </form> 
   );
 }

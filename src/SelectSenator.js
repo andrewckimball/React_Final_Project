@@ -31,17 +31,17 @@ function SelectSenator({setSenator}) {
 
   return (
       <div className='SelectV2'>
-          <form name="form" class="col-lg-9 offset-lg-1" onSubmit={handleSearch}>
+          <form name="form" className="col-lg-9 offset-lg-1" onSubmit={handleSearch}>
               <div class="form-group">
                   <label>Choose Senator among list</label>
                   <input 
-                      class="form-control" 
+                      className="form-control" 
                       name="tweet" 
                       placeholder="Enter Senator" 
                       value={search}
                       onChange={e => setSearch(e.target.value)}/>
               </div>
-              <button value="Submit" class="btn btn-outline-primary">Search</button>
+              <button value="Submit" className="btn btn-outline-primary">Search</button>
               <div className='result'>
                 <p dangerouslySetInnerHTML={{__html: results}} ></p>
               </div> 
