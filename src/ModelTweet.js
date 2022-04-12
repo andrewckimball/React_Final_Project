@@ -13,7 +13,7 @@ function ModelTweet({setSenator}) {
     // Debugging endpoint
     // const sen_name_endpoint = `http://127.0.0.1:8000/predict/${search}&origin=*`;
     // Live endpoint
-    const sen_name_endpoint = `http://18.223.172.210/predict/${search}&origin=*`;
+    const sen_name_endpoint = `https://18.223.172.210/predict/${search}&origin=*`;
     const response_senator = await fetch(sen_name_endpoint);
     
     if (!response_senator.ok) {

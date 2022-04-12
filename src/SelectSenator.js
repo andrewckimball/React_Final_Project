@@ -11,7 +11,7 @@ function SelectSenator({setSenator}) {
       // Debugging purposes
       // const endpoint = `http://127.0.0.1:8000/select/${search}`;
       // Live
-      const endpoint = `http://18.223.172.210/select/${search}`;
+      const endpoint = `https://18.223.172.210/select/${search}`;
       const response = await fetch(endpoint);
       
       if (!response.ok) {
