@@ -8,7 +8,7 @@ function SelectSenatorSearch({setSenator}) {
 
   async function fetchData() {
     if (search) {
-      const endpoint = `https://18.223.172.210/select/${search}`
+      const endpoint = `http://18.223.172.210/select/${search}`
       // const endpoint = `http://127.0.0.1:8000/select/${search}`
       const data = await fetch(endpoint)
       const json = await data.json();
