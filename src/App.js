@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import './App.css';
 import WrappedMap from './Map';
 import ModelTweet from './ModelTweet';
-// import SelectSenator from './SelectSenator';
 import SelectSenatorSearch from './SelectSenatorSearch';
 import ToggleView from './ToggleView';
 
 
-/* IMPORTANT youtube vids: https://www.youtube.com/watch?v=x7niho285qs | https://www.youtube.com/watch?v=Gyg5R8Sfo1U */
 
 
 function TwitterApp() {

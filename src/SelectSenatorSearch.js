@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SearchBar from "./Components/SearchBar.js";
+import SearchBar from "./SearchBar.js";
 import * as NameData from './Data/Names.json';
 
 function SelectSenatorSearch({setSenator}) {
@@ -19,7 +19,7 @@ function SelectSenatorSearch({setSenator}) {
 
   useEffect(() => {
     fetchData()
-  }, []) //
+  }, []) 
 
   const handleSubmit = e => {
     e.preventDefault()
