@@ -9,11 +9,7 @@ function ModelTweet({setSenator}) {
     e.preventDefault();
     if (search === "") return;
 
-
-    // Debugging endpoint
-    // const sen_name_endpoint = `http://127.0.0.1:8000/predict/${search}&origin=*`;
-    // Live endpoint
-    const sen_name_endpoint = `https://18.223.172.210/predict/${search}&origin=*`;
+    const sen_name_endpoint = `https://stark-cliffs-11649.herokuapp.com/predict/${search}&origin=*`;
     const response_senator = await fetch(sen_name_endpoint);
     
     if (!response_senator.ok) {
@@ -28,12 +24,12 @@ function ModelTweet({setSenator}) {
   return (
     <form name="form" onSubmit={handleSearch} class="col-lg-9 offset-lg-1">
       <div class="form-group">
-          <label>Write a tweet for the model to guess</label>
+          <label>Write a Tweet for the AI model to guess</label>
           <textarea 
             class="form-control" 
             name="tweet" 
             rows="3" 
-            placeholder="Enter tweet text"
+            placeholder="Enter text (the model will guess the most likely senator to author the tweet)"
             maxLength="280"
             value={search}
             onChange={e => setSearch(e.target.value)}

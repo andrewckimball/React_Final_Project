@@ -19,7 +19,7 @@ function TwitterApp() {
   return (
     <div className="App-header">
         <div className='header'>
-            <h1>Welcome to My App</h1>
+            <h1>US Senator Selector &#38; Twitter Predictor</h1>
         </div>
         <div className='content'>
             <div className="twitter">
@@ -28,7 +28,6 @@ function TwitterApp() {
                 { checked ? (
                     <ModelTweet setSenator={setSenator}/>
                 ) : (
-                    // <SelectSenator setSenator={setSenator}/>
                     <SelectSenatorSearch setSenator={setSenator}/>
                 )}
             </div>
