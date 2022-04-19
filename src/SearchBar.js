@@ -59,17 +59,16 @@ function SearchBar({placeholder, NameData, setSearch}) {
                 <div className='dataResult'>
                     {filteredData.map((value, key) => {
                         return (
-                            <>
-                                <button 
-                                    value={value.key_name} 
-                                    // onClick={setSearch(value.key_name)}
-                                    onClick={() => {runSearch(value.key_name)}}
-                                    className="btn btn-link"
-                                >
-                                    {value.rename}
-                                </button>
-                                <br></br>
-                            </>
+                                <div key={value.id}>
+                                    <button 
+                                        key={value.id}
+                                        onClick={() => {runSearch(value.key_name)}}
+                                        className="btn btn-link"
+                                    >
+                                        {value.rename}
+                                    </button> 
+                                </div>
+
                         )
                     })}
                 </div>
