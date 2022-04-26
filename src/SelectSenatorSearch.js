@@ -30,7 +30,6 @@ function SelectSenatorSearch({setSenator}) {
       const json = await data.json();
       setFetchedData(json)
       setSenator(json)
-      // setLoading(true)
     }
   }
 
