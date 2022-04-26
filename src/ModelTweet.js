@@ -30,7 +30,6 @@ function ModelTweet({setSenator}) {
       const json = await response_senator.json(); 
       setResults(json);
       setSenator(json);
-      // setLoading(true);
     }
   }
 
@@ -68,13 +67,6 @@ function ModelTweet({setSenator}) {
           }
         </>
       )}
-      {/* {results && (
-        <div className="col-md-12">
-          <h3>{results['full_name']}</h3>
-          <img src={results['img']} className='imgWrap' alt='img'></img>
-          <p dangerouslySetInnerHTML={{__html: results['wiki_html'].slice(1,-1)}}></p>
-        </div>
-      )} */}
     </form> 
   );
 }
